@@ -2,7 +2,9 @@ import tkinter as tk
 from tkinter import ttk, scrolledtext
 import threading
 import queue
-from main import ACController
+
+from app_state import AppState
+from controller import ACController
 from config import Config
 import wakepy
 
@@ -11,38 +13,53 @@ class App(tk.Tk):
         super().__init__()
         self.title("Smart AC Controller")
         self.geometry("600x500")
+        self.app_state = AppState()
+
+        # --- Class variables ---
+        self.controller_thread = None
+        self.message_queue = queue.Queue()
+        self.stop_event = None
+
+        self.controller = ACController(self.stop_event, self.app_state)
 
 
         # --- UI Elements ---
         self.main_frame = ttk.Frame(self, padding="10")
         self.main_frame.pack(fill=tk.BOTH, expand=True)
 
+
         # Token Input
+        # Frame
         token_frame = ttk.Frame(self.main_frame)
         token_frame.pack(fill=tk.X, pady=5)
         # Token Prefix
         ttk.Label(token_frame, text=f"Token:{Config.TOKEN_PREFIX}").pack(side=tk.LEFT)
         # Input Field
-        self.token_value = tk.StringVar(value="")
-        self.token_entry = ttk.Entry(token_frame, textvariable=self.token_value, width=50)
+        self.token_entry = ttk.Entry(token_frame, textvariable=self.app_state.token, width=50)
         self.token_entry.pack(side=tk.LEFT, fill=tk.X, expand=True)
 
+
         # Interval Input
+        # Frame
         interval_frame = ttk.Frame(self.main_frame)
         interval_frame.pack(fill=tk.X, pady=5)
-        ttk.Label(interval_frame, text="Interval (minutes):").pack(side=tk.LEFT)
-        self.interval_var = tk.StringVar(value=int(Config.INTERVAL_SECONDS / 60))
-        self.interval_entry = ttk.Entry(interval_frame, textvariable=self.interval_var, width=10)
+        # Interval Prefix
+        ttk.Label(interval_frame, text="Switch Interval:").pack(side=tk.LEFT)
+        # Input Field
+        self.interval_entry = ttk.Entry(interval_frame, textvariable=self.app_state.interval, width=10)
         self.interval_entry.pack(side=tk.LEFT)
 
-        # Status Display
+
+        # AC Status Display
+        # Frame
         status_frame = ttk.Frame(self.main_frame)
         status_frame.pack(fill=tk.X, pady=10)
-        self.ac_status = tk.StringVar(value="AC Status: Unknown")
-        self.next_update_time = tk.StringVar(value="Next Switch: N/A")
 
-        ttk.Label(status_frame, textvariable=self.ac_status, font=("Helvetica", 12, "bold")).pack(side=tk.LEFT)
-        ttk.Label(status_frame, textvariable=self.next_update_time, font=("Helvetica", 10)).pack(side=tk.RIGHT)
+        ttk.Label(status_frame, text="Current AC Status:", font=("Helvetica", 12)).pack(side=tk.LEFT)
+        #
+        ttk.Label(status_frame, textvariable=self.app_state.ac_status, font=("Helvetica", 12, "bold")).pack(side=tk.LEFT)
+        ttk.Label(status_frame, textvariable=self.app_state.next_check_time_str, font=("Helvetica", 10)).pack(side=tk.RIGHT)
+        ttk.Label(status_frame, text="Next Check:", font=("Helvetica", 10)).pack(side=tk.RIGHT)
 
         # Start/Stop Button
         self.switch_button = ttk.Button(self.main_frame, text="Start", command=self.switch_button)
@@ -53,17 +70,13 @@ class App(tk.Tk):
         self.log_area.pack(fill=tk.BOTH, expand=True, pady=5)
         self.log_area.configure(state='disabled')
 
-        # --- Class variables ---
-        self.controller_thread = None
-        self.message_queue = queue.Queue()
-        self.stop_event = None
-
         self.process_queue()
 
     # Switch Button handler
     def switch_button(self):
         is_running = self.controller_thread and self.controller_thread.is_alive()
 
+        # If running, stop it; if not, start it
         if is_running:
             # Stop the loop
             if self.stop_event:
@@ -75,7 +88,6 @@ class App(tk.Tk):
             self.interval_entry.config(state="normal")
         else:
             # Start the loop
-            token = self.token_value.get()
             try:
                 interval_minutes = int(self.interval_var.get())
                 if interval_minutes <= 0:
@@ -86,10 +98,8 @@ class App(tk.Tk):
 
             self.stop_event = threading.Event()
             controller = ACController(
-                token=token,
-                interval_seconds=interval_minutes * 60,
-                message_queue=self.message_queue,
-                stop_event=self.stop_event
+                stop_event=self.stop_event,
+                app_state=self.app_state
             )
 
             self.controller_thread = threading.Thread(target=controller.control_loop, daemon=True)

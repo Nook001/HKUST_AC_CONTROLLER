@@ -13,7 +13,6 @@ class Config:
 
 	@staticmethod
 	def post_header(token: str):
-		"""切换状态的请求头"""
 		return {
 			'Accept': 'application/json',
 			'Accept-Encoding': 'gzip, deflate, br, zstd',
@@ -34,15 +33,17 @@ class Config:
 			'sec-ch-ua-platform': '"Windows"'
 		}
 
+
+	@staticmethod
+	def post_body(is_on: bool):
+		return json.dumps({"toggle": {"status": 0 if is_on else 1}})
+
+
 	@staticmethod
 	def get_header(token: str):
-		"""获取状态的请求头"""
 		return {
 			'Authorization': token,
 			'Content-Type': 'application/json',
 			'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36',
 		}
 
-	@staticmethod
-	def post_body(is_on: bool):
-		return json.dumps({"toggle": {"status": 0 if is_on else 1}})
