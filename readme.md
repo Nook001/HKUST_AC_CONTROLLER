@@ -1,4 +1,4 @@
-# HKUST AC Controller 🇭🇰❄️
+# HKUST AC Controller❄️
 
 **A smart controller to save money on your HKUST dorm AC.**
 
