@@ -7,9 +7,9 @@ Dynamic UI variables.
 """
 class AppState:
     def __init__(self):
-        self.ac_status = tk.BooleanVar(value=False)
+        self.ac_status = tk.BooleanVar(value=None)
         self.token = tk.StringVar(value="")
-        self.interval = tk.StringVar(value=str(Config.INTERVAL_SECONDS/60))
+        self.interval = tk.StringVar(value=str(int(Config.INTERVAL_SECONDS/60)))
         self.next_check_time_str = tk.StringVar(value="N/A")
         self.is_running = tk.BooleanVar(value=False)
 
@@ -30,7 +30,7 @@ class AppState:
         return self.next_check_time_str.get()
     
     @property
-    def is_running_var(self) -> bool:
+    def get_is_running(self) -> bool:
         return self.is_running.get()
 
     # --- Public methods for other parts of the app to modify the state ---
@@ -42,6 +42,3 @@ class AppState:
 
     def set_running(self, is_running: bool):
         self.is_running.set(is_running)
-
-    def is_running(self) -> bool:
-        return self.is_running.get()
