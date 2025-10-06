@@ -39,7 +39,7 @@ Tired of the time-based AC charges in HKUST dorms? This script helps you save mo
 
 1.  **Run the application:**
     ```bash
-    python gui.py
+    python main_window.py
     ```
 
 2.  **Input your Token:**

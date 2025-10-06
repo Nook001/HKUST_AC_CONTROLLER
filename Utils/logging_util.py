@@ -22,7 +22,7 @@ def setup_logging(gui_queue: queue.Queue):
 
     # 1. File Handler to save logs to a file
     file_handler = RotatingFileHandler(
-        'ac_controller.log', maxBytes=2*1024*1024, backupCount=2, encoding='utf-8'
+	    '../ac_controller.log', maxBytes=2 * 1024 * 1024, backupCount=2, encoding='utf-8'
     )
     file_handler.setFormatter(log_format)
     logger.addHandler(file_handler)

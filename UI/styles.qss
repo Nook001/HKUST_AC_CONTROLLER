@@ -1,0 +1,147 @@
+/* ===========================================
+   Smart AC Controller - PyQt6 Stylesheet
+   =========================================== */
+
+/* 主窗口背景 */
+QMainWindow {
+    background-color: #F5F7FA;
+}
+
+QWidget#MainWidget {
+    background-color: #F5F7FA;
+}
+
+/* ===========================================
+   输入框样式
+   =========================================== */
+QLineEdit {
+    padding: 8px 12px;
+    border: 1px solid #D1D5DB;
+    border-radius: 4px;
+    font-size: 10pt;
+    background-color: white;
+    color: #1F2937;
+}
+
+QLineEdit:focus {
+    border: 2px solid #3B82F6;
+    padding: 7px 11px;  /* 调整 padding 补偿 border 增加 */
+}
+
+QLineEdit:disabled {
+    background-color: #F3F4F6;
+    color: #9CA3AF;
+    border: 1px solid #E5E7EB;
+}
+
+QLineEdit::placeholder {
+    color: #9CA3AF;
+}
+
+/* ===========================================
+   按钮样式
+   =========================================== */
+QPushButton#StartButton {
+    background-color: #3B82F6;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    padding: 12px 24px;
+    font-size: 11pt;
+    font-weight: bold;
+    min-height: 40px;
+}
+
+QPushButton#StartButton:hover {
+    background-color: #2563EB;
+}
+
+QPushButton#StartButton:pressed {
+    background-color: #1D4ED8;
+}
+
+QPushButton#StartButton:disabled {
+    background-color: #9CA3AF;
+    color: #E5E7EB;
+}
+
+/* ===========================================
+   状态卡片样式
+   =========================================== */
+QFrame#StatusCard {
+    background-color: #E8F2FE;
+    border: 1px solid #C1D8F5;
+    border-radius: 30px;
+    padding: 14px;
+}
+
+/* 卡片标题 */
+QLabel#CardTitle {
+    font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
+    font-size: 10pt;
+    font-weight: bold;
+    color: #1E293B;
+    background-color: transparent;
+    border: none;
+}
+
+/* 卡片数值 */
+QLabel#CardValue {
+    font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
+    font-size: 12pt;
+    color: #1E293B;
+    background-color: transparent;
+    border: none;
+    margin-top: 4px;
+}
+
+/* ===========================================
+   日志区域样式
+   =========================================== */
+QTextEdit#LogArea {
+    background-color: white;
+    border: 1px solid #D1D5DB;
+    border-radius: 4px;
+    padding: 8px;
+    color: #1F2937;
+}
+
+QTextEdit#LogArea:focus {
+    border: 1px solid #3B82F6;
+}
+
+/* 滚动条样式 */
+QScrollBar:vertical {
+    background-color: #F3F4F6;
+    width: 12px;
+    border-radius: 6px;
+}
+
+QScrollBar::handle:vertical {
+    background-color: #D1D5DB;
+    border-radius: 6px;
+    min-height: 20px;
+}
+
+QScrollBar::handle:vertical:hover {
+    background-color: #9CA3AF;
+}
+
+QScrollBar::add-line:vertical,
+QScrollBar::sub-line:vertical {
+    height: 0px;
+}
+
+QScrollBar::add-page:vertical,
+QScrollBar::sub-page:vertical {
+    background: none;
+}
+
+/* ===========================================
+   标签样式
+   =========================================== */
+QLabel {
+    color: #374151;
+    font-size: 10pt;
+    background-color: transparent;
+}

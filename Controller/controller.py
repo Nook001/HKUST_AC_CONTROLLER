@@ -5,7 +5,7 @@ import threading
 
 from wakepy import keep
 from config import Config
-from state import AppState
+from Controller.app_state import AppState
 
 logger = logging.getLogger(__name__)
 class ACController:
