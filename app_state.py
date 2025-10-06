@@ -6,31 +6,41 @@ User configurable application state.
 Dynamic UI variables.
 """
 class AppState:
+    """Holds UI-bound state.
+
+    Interval统一以 *分钟* 存储 (IntVar)，需要秒的地方通过属性换算，
+    避免各处 float/int/str 的重复来回转换。
+    """
+
     def __init__(self):
         self.ac_status = tk.BooleanVar(value=None)
         self.token = tk.StringVar(value="")
-        self.interval = tk.StringVar(value=str(int(Config.INTERVAL_SECONDS/60)))
+        self.interval_minutes = tk.IntVar(value=Config.INTERVAL_MIN)
         self.next_check_time_str = tk.StringVar(value="N/A")
         self.is_running = tk.BooleanVar(value=False)
 
     @property
-    def get_ac_status(self) -> bool:
+    def ac_status_val(self) -> bool:
         return self.ac_status.get()
 
     @property
-    def get_token(self) -> str:
+    def token_val(self) -> str:
         return Config.TOKEN_PREFIX + self.token.get()
 
     @property
-    def get_interval(self) -> str:
-        return self.interval.get()
+    def interval_minutes_val(self) -> int:
+        return self.interval_minutes.get()
 
     @property
-    def get_next_update_time(self) -> str:
+    def interval_seconds_val(self) -> int:
+        return self.interval_minutes.get() * 60
+
+    @property
+    def next_update_time_val(self) -> str:
         return self.next_check_time_str.get()
     
     @property
-    def get_is_running(self) -> bool:
+    def is_running_val(self) -> bool:
         return self.is_running.get()
 
     # --- Public methods for other parts of the app to modify the state ---

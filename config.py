@@ -1,9 +1,8 @@
 import json
 
-
 class Config:
-	# 状态切换间隔，单位为秒
-	INTERVAL_SECONDS = 1800
+	# 状态切换间隔，单位为分钟
+	INTERVAL_MIN = 30
 
 	TOKEN_PREFIX = "Bearer "
 
