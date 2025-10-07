@@ -53,7 +53,7 @@ def build_interval_section(window):
     layout.setSpacing(10)
     
     # 标签
-    label = QLabel("Switch Interval (minutes):")
+    label = QLabel("Switch Interval[minutes]:")
     label.setMinimumWidth(150)
     
     # 输入框
@@ -96,7 +96,7 @@ def build_duration_section(window):
     window.duration_entry.setMaximumWidth(60)
     
     # 单位标签
-    unit_label = QLabel("Running Duration Limit (hours):")
+    unit_label = QLabel("Running Duration Limit[hours]:")
 
     
     # 连接信号
@@ -129,7 +129,7 @@ def build_duration_section(window):
     window.main_layout.addLayout(layout)
 
 
-"""状态显示区 - 两张圆角卡片"""
+"""状态显示区"""
 def build_status_section(window):
     container = QWidget()
     layout = QHBoxLayout(container)

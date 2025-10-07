@@ -22,12 +22,12 @@ This tool automatically switches your AC on and off at regular intervals, keepin
 ### Option 1: Download Executable (Recommended) | 下载可执行文件（推荐）
 
 **English:**
-1. Download `HKUST_AC_Controller.exe` from the [Releases](https://github.com/Nook001/HKUST_AC_CONTROLLER/releases/tag/1.0.0) page
+1. Download `HKUST_AC_Controller.exe` from the [Releases](https://github.com/Nook001/HKUST_AC_CONTROLLER/releases/tag/1.1.1) page
 2. Double-click to run
 3. Fill in your Token(see the tutorial below) and start it
 
 **中文：**
-1. 从 [Releases](https://github.com/Nook001/HKUST_AC_CONTROLLER/releases/tag/1.0.0) 页面下载 `HKUST_AC_Controller.exe`
+1. 从 [Releases](https://github.com/Nook001/HKUST_AC_CONTROLLER/releases/tag/1.1.1) 页面下载 `HKUST_AC_Controller.exe`
 2. 双击运行
 3. 填入Token(按下方教程获取)并运行
 
