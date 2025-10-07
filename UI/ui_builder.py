@@ -1,6 +1,6 @@
 from PyQt6.QtWidgets import (
-    QWidget, QVBoxLayout, QHBoxLayout, QLabel, 
-    QLineEdit, QPushButton, QTextEdit, QFrame
+	QWidget, QVBoxLayout, QHBoxLayout, QLabel,
+	QLineEdit, QPushButton, QTextEdit, QFrame, QCheckBox
 )
 from PyQt6.QtCore import Qt
 from config import Config
@@ -20,6 +20,7 @@ def build_ui(window):
     # 构建各个部分
     build_token_section(window)
     build_interval_section(window)
+    build_duration_section(window)
     build_status_section(window)
     build_controls_section(window)
     build_log_section(window)
@@ -39,9 +40,7 @@ def build_token_section(window):
     window.token_entry.setText(window.app_state.token)
     
     # 连接信号：输入框内容改变时更新状态
-    window.token_entry.textChanged.connect(
-        lambda text: setattr(window.app_state, 'token', text)
-    )
+    window.token_entry.textChanged.connect( lambda text: setattr(window.app_state, 'token', text) )
     
     layout.addWidget(label)
     layout.addWidget(window.token_entry, stretch=1)
@@ -80,21 +79,77 @@ def build_interval_section(window):
     
     window.main_layout.addLayout(layout)
 
+
+def build_duration_section(window):
+    """运行时长限制设置区（新增）"""
+    layout = QHBoxLayout()
+    layout.setSpacing(10)
+    
+    # 复选框
+    window.duration_checkbox = QCheckBox()
+    window.duration_checkbox.setChecked(True)  # 默认启用
+    
+    # 时长输入框
+    window.duration_entry = QLineEdit()
+    window.duration_entry.setPlaceholderText("8")
+    window.duration_entry.setText(str(Config.DURATION_HOUR))
+    window.duration_entry.setMaximumWidth(60)
+    
+    # 单位标签
+    unit_label = QLabel("Running Duration Limit (hours):")
+
+    
+    # 连接信号
+    def update_duration(text):
+        try:
+            window.app_state.duration_limit_hours = int(text) if window.duration_checkbox.isChecked() else 0
+        except ValueError:
+            pass
+    
+    def toggle_duration(state):
+        enabled = (state == Qt.CheckState.Checked.value)
+        window.duration_entry.setEnabled(enabled)
+        if enabled:
+            try:
+                value = int(window.duration_entry.text())
+                window.app_state.duration_limit_hours = value
+            except ValueError:
+                window.app_state.duration_limit_hours = Config.DURATION_HOUR
+        else:
+            window.app_state.duration_limit_hours = 0
+    
+    window.duration_checkbox.stateChanged.connect(toggle_duration)
+    window.duration_entry.textChanged.connect(update_duration)
+
+    layout.addWidget(unit_label)
+    layout.addWidget(window.duration_checkbox)
+    layout.addWidget(window.duration_entry)
+    layout.addStretch()
+    
+    window.main_layout.addLayout(layout)
+
+
+"""状态显示区 - 两张圆角卡片"""
 def build_status_section(window):
-    """状态显示区 - 两张圆角卡片"""
     container = QWidget()
     layout = QHBoxLayout(container)
     layout.setContentsMargins(0, 10, 0, 10)
-    layout.setSpacing(10)
+    layout.setSpacing(20)
     
-    # 创建状态显示标签（需要在创建卡片之前）
+    # 卡片内容标签
+    # 空调状态
     window.status_label = QLabel("N/A")
     window.status_label.setObjectName("CardValue")
     window.status_label.setAlignment(Qt.AlignmentFlag.AlignLeft)
     
+    # 下次更新时间
     window.next_check_label = QLabel("N/A")
     window.next_check_label.setObjectName("CardValue")
     window.next_check_label.setAlignment(Qt.AlignmentFlag.AlignLeft)
+
+    window.remaining_time_label = QLabel("N/A")
+    window.remaining_time_label.setObjectName("CardValue")
+    window.remaining_time_label.setAlignment(Qt.AlignmentFlag.AlignLeft)
     
     # AC Status 卡片
     ac_card = create_status_card("AC Status", window.status_label)
@@ -103,24 +158,25 @@ def build_status_section(window):
     # Next Check 卡片
     next_card = create_status_card("Next Check", window.next_check_label)
     layout.addWidget(next_card, stretch=1)
-    
+
+    # 新增：Remaining Time 卡片
+    remaining_card = create_status_card("Remaining Time", window.remaining_time_label)
+    layout.addWidget(remaining_card, stretch=1)
+
     window.main_layout.addWidget(container)
     
     # 初始化状态显示
     window.update_status_display()
 
 def create_status_card(title: str, value_widget: QLabel) -> QFrame:
-    """创建单个状态卡片
-    
-    替代原来 150+ 行的 Canvas 绘制代码，使用 QFrame + QSS 实现圆角效果
-    """
+    # 创建单个状态卡片
     card = QFrame()
     card.setObjectName("StatusCard")
     card.setMinimumHeight(84)
     
     # 卡片内部布局
     card_layout = QVBoxLayout(card)
-    card_layout.setContentsMargins(14, 14, 14, 14)
+    card_layout.setContentsMargins(4, 4, 4, 4)
     card_layout.setSpacing(4)
     
     # 标题标签

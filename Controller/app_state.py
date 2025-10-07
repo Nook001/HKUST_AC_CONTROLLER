@@ -6,19 +6,13 @@ User configurable application state.
 Dynamic UI variables using PyQt6 signals/slots mechanism.
 """
 
-class AppState(QObject):
-    """Holds UI-bound state using PyQt6 signals.
-    
-    Signals are emitted when state changes, allowing UI components
-    to react automatically without manual polling.
-    
-    Interval统一以 *分钟* 存储，需要秒的地方通过属性换算。
-    """
-    
+class AppState(QObject):    
     # 定义信号 - 当状态改变时自动发射
     ac_status_changed = pyqtSignal(object)  # bool or None
     is_running_changed = pyqtSignal(bool)
     next_check_time_changed = pyqtSignal(str)
+    duration_limit_changed = pyqtSignal(int)
+    remaining_time_changed = pyqtSignal(str)     # 新增：剩余时间变化信号
 
     def __init__(self):
         super().__init__()
@@ -27,10 +21,43 @@ class AppState(QObject):
         self._ac_status = None
         self._token = ""
         self._interval_minutes = Config.INTERVAL_MIN
+        self._duration_limit_hours = Config.DURATION_HOUR
+        self._start_time = None  # 记录开始时间
+        self._remaining_time = "N/A"   # 新增：剩余时间字符串
         self._next_check_time_str = "N/A"
         self._is_running = False
 
-    # ==================== Properties (只读访问) ====================
+    # ==================== Properties (只读) ====================
+    @property
+    def duration_limit_hours(self) -> int:
+        """获取运行时长限制（小时）"""
+        return self._duration_limit_hours
+    
+    @duration_limit_hours.setter
+    def duration_limit_hours(self, value: int):
+        if value != self._duration_limit_hours:
+            self._duration_limit_hours = value
+            self.duration_limit_changed.emit(value)
+    
+    @property
+    def start_time(self):
+        """开始运行的时间"""
+        return self._start_time
+    
+    @start_time.setter
+    def start_time(self, value):
+        self._start_time = value
+    
+    @property
+    def remaining_time(self) -> str:
+        """剩余时间显示"""
+        return self._remaining_time
+    
+    @remaining_time.setter
+    def remaining_time(self, value: str):
+        if value != self._remaining_time:
+            self._remaining_time = value
+            self.remaining_time_changed.emit(value)
     
     @property
     def ac_status_val(self) -> bool:
@@ -49,7 +76,7 @@ class AppState(QObject):
 
     @property
     def token_val(self) -> str:
-        """获取完整 token（含 Bearer 前缀）"""
+        """获取完整 token"""
         return Config.TOKEN_PREFIX + self._token
 
     @property

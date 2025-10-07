@@ -109,7 +109,7 @@ python main.py
 **English:**  
 Running AC continuously: **~$200 HKD/month**  
 Using this controller: **~$100 HKD/month**  
-**Savings: ~$100 HKD/month or $1,200 HKD/year!**
+**Savings: ~$100 HKD/month or $1,200 HKD/year(suppose we have student from North/South Pole that uses AC even in the winter)!**
 
 **中文：**  
 持续启动空调：**约 200 港币/月**  
@@ -140,12 +140,12 @@ Using this controller: **~$100 HKD/month**
 
 **English:**
 - Check if your token is valid (log in again if needed)
-- Verify your internet connection
+- Verify your internet connection (don't use **VPN**)
 - Check the log area for error messages
 
 **中文：**
 - 检查 Token 是否有效（如需要请重新登录）
-- 确认网络连接正常
+- 确认网络连接正常 (不要使用VPN)
 - 查看日志区域的错误信息
 
 ### Program crashes on start? | 程序启动就崩溃？

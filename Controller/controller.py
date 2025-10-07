@@ -22,15 +22,12 @@ class ACController:
 			ac_status = data['data']['ac_status']['DisconnectRelay']
 
 			logger.info(f"✅ Fetched AC status: {"ON" if ac_status else "OFF"}.")
-			logger.info(f"✅ 获取空调状态: {'开启' if ac_status else '关闭'}.")
 			self.app_state.set_status(ac_status)
 
 		except requests.exceptions.RequestException as e:
 			logger.info(f"❌ Error fetching AC status: {e}")
-			logger.info(f"❌ 获取空调状态时出错: {e}")
 		except (KeyError, TypeError):
 			logger.info("❌ Unexpected response format when fetching AC status.")
-			logger.info("❌ 获取空调状态时响应格式异常.")
 
 
 	def switch_ac(self) -> bool:
@@ -41,13 +38,11 @@ class ACController:
 
 			# Logging
 			logger.info("✅ Request successful! Server response content:")
-			logger.info("✅ 请求成功! 服务器响应内容:")
 			logger.info(response.json()['data'])
 			return True
 
 		except requests.exceptions.RequestException as e:
 			logger.info(f"❌ Error toggling AC status: {e}")
-			logger.info(f"❌ 切换空调状态时出错: {e}")
 			return False
 
 

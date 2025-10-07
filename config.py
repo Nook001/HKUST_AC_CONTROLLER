@@ -3,6 +3,7 @@ import json
 class Config:
 	# 状态切换间隔，单位为分钟
 	INTERVAL_MIN = 30
+	DURATION_HOUR = 8
 
 	TOKEN_PREFIX = "Bearer "
 
