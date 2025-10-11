@@ -21,7 +21,7 @@ class ACController:
 			data = response.json()
 			ac_status = data['data']['ac_status']['DisconnectRelay']
 
-			logger.info(f"✅ Fetched AC status: {"ON" if ac_status else "OFF"}.")
+			logger.info(f"✅ Fetched AC status: {'ON' if ac_status else 'OFF'}.")
 			self.app_state.set_status(ac_status)
 
 		except requests.exceptions.RequestException as e:
